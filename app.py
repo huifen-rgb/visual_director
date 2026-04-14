@@ -1,12 +1,12 @@
 import streamlit as st
 
 # ==========================================
-# 1. 視覺風格庫 (10 大專業風格全回歸 - 絕無刪減)
+# 1. 視覺風格庫 (10 大專業風格 - 完整回歸)
 # ==========================================
 STYLE_CONFIG = {
     "民生消費 (Fluid Analytics)": {
-        "theme": "Consumer TRENDS, Fluid & Advanced",
-        "ui": "Smooth organic shapes background, Gradational color overlays, Frosted glass panels",
+        "theme": "Consumer TRENDS, Fluid",
+        "ui": "Smooth organic shapes (blobs) background, Gradational color overlays, Frosted glass panels",
         "palette": "Soft Beige, Lifestyle Blue, Clear Red",
         "highlight_color": "Vibrant Sunburst Orange",
         "layout_mode": "DYNAMIC"
@@ -77,31 +77,33 @@ STYLE_CONFIG = {
 }
 
 # ==========================================
-# 2. 核心組裝邏輯 (疊加暴力避讓與物理貼合)
+# 2. 核心組裝邏輯 (疊加所有鋼鐵協定)
 # ==========================================
 def build_final_prompt(title, left_in, right_in, style_name, layout_mode, icon_style):
     style = STYLE_CONFIG[style_name]
     
     # --- 暴力避讓：針對右下角 588x90 的死守 ---
     TICKER_ZONE_ENFORCEMENT = """
-[CRITICAL SYSTEM ERROR PREVENTION: TICKER ZONE]
-- VOID AREA: The bottom-right corner ($X > 1332, Y > 990$, $588 x 90$ px) MUST BE PURE EMPTY BACKGROUND.
-- FORBIDDEN: Any text, icons, UI panels, or decorative elements touching this zone is a FAILURE.
-- BROADCAST RULE: This space belongs to the TV Ticker. Do NOT render anything here.
+[ABSOLUTE VOID ENFORCEMENT: TICKER ZONE]
+- AREA: Bottom-Right ($X > 1332, Y > 990$, $588 x 90$ px).
+- STRICT RULE: This zone is a SACRED VOID. Absolutely ZERO content allowed.
+- NO MARKINGS: No text, icons, UI panels, decorative stars, or graphical accents.
+- BROADCAST RULE: If any pixel touches this zone, the image is UNUSABLE. Treat as a physical hole in the screen.
 """
 
     # --- 物理資產鎖死：禁止重繪 ---
     ASSET_LOCK_PROTOCOL = """
 [ULTIMATE ASSET PROTECTION]
 - UPLOADED FILE: Treat as an "Immutable Physical Object".
-- HARD-PASTING RULE: Use the EXACT pixels. Do NOT redraw, Do NOT morph, Do NOT "beautify".
-- AUTHENTICITY: The realism of the uploaded asset is the top priority.
+- HARD-PASTING RULE: Use the EXACT pixels. Do NOT redraw, morph, or "beautify".
+- AUTHENTICITY: The realism of the uploaded asset is the SUPREME priority.
 """
 
+    # --- 符號轉換矩陣 ---
     SYMBOL_PROTOCOL = f"""
 [SYMBOL TRANSFORMATION MATRIX]
-1. QUOTE RULE (" "): Text color to {style['highlight_color']}. REMOVE quotes.
-2. BRACKET RULE (【 】): Text on Deep Blue Color Block. REMOVE brackets.
+1. QUOTE RULE (" "): Text color to {style['highlight_color']}. REMOVE quotes from render.
+2. BRACKET RULE (【 】): Text on Deep Blue Color Block. REMOVE brackets from render.
 3. PARENTHESES RULE (( )): Keep text AND parentheses. NO change to color.
 """
 
@@ -109,7 +111,7 @@ def build_final_prompt(title, left_in, right_in, style_name, layout_mode, icon_s
     i_cmd = f"[ASSET: {icon_style.upper()}]"
 
     final_prompt = f"""
-[SYSTEM PROTOCOL: BROADCAST GRAPHIC V7.1]
+[SYSTEM PROTOCOL: BROADCAST GRAPHIC V7.3]
 CANVAS: Fixed 1920x1080 (Strict 16:9).
 {TICKER_ZONE_ENFORCEMENT}
 {ASSET_LOCK_PROTOCOL}
@@ -118,8 +120,7 @@ CANVAS: Fixed 1920x1080 (Strict 16:9).
 {i_cmd}
 
 [AESTHETIC: {style_name}]
-- THEME: {style['theme']} | UI: {style['ui']}
-- HEADER: {style['header_style'] if 'header_style' in style else 'Bold Sans-serif'} | PALETTE: {style['palette']}
+- THEME: {style['theme']} | UI: {style['ui']} | PALETTE: {style['palette']}
 
 [CONTENT DATA]
 - TITLE: {title}
@@ -129,27 +130,27 @@ CANVAS: Fixed 1920x1080 (Strict 16:9).
 [STRICT GUARDRAILS]
 - RENDER TRADITIONAL CHINESE ONLY.
 - REMOVE labels like [日曆效果] or [圖].
-- Physical integration and 16:9 ratio are SUPREME. 
-- Right-bottom void is non-negotiable.
+- Physical integration of assets and 16:9 ratio are the TOP priorities.
+- THE BOTTOM-RIGHT ZONE MUST REMAIN PURE BACKGROUND TEXTURE.
 """
     return final_prompt
 
 # ==========================================
 # 3. Streamlit 介面
 # ==========================================
-st.set_page_config(page_title="Visual Director v7.1", layout="wide")
-st.title("🎬 Visual Director v7.1 - 旗艦功能全回歸版")
+st.set_page_config(page_title="Visual Director v7.3", layout="wide")
+st.title("🎬 Visual Director v7.3 - 旗艦最終整合版")
 
 col_in, col_out = st.columns([1, 1.2])
 
 with col_in:
     st.subheader("📋 內容編輯區")
     title_in = st.text_input("新聞主標", placeholder='輸入主標題...')
-    left_in = st.text_area("區塊 A (內容)", height=150)
-    right_in = st.text_area("區塊 B (補充)", height=150)
+    left_in = st.text_area("區塊 A (主要內容)", height=150)
+    right_in = st.text_area("區塊 B (補充說明)", height=150)
     
     st.divider()
-    st.subheader("🛠️ 視覺與硬體規格")
+    st.subheader("🛠️ 規格參數")
     s_style = st.selectbox("1. 選擇視覺風格", list(STYLE_CONFIG.keys()))
     
     c1, c2 = st.columns(2)
@@ -162,15 +163,16 @@ with col_out:
     st.subheader("🚀 生成之 AI 繪圖指令")
     if title_in:
         final_cmd = build_final_prompt(title_in, left_in, right_in, s_style, s_layout, s_icon)
-        st.success(f"已就緒：{s_style} 方案")
+        st.success(f"已就緒：{s_style} 方案 (暴力鎖定已掛載)")
         st.code(final_cmd, language="markdown")
         
-        with st.expander("✅ 製作人檢查清單 (Checklist)", expanded=True):
+        with st.expander("✅ 功能檢查清單 (確認沒被偷刪)", expanded=True):
             st.markdown(f"""
-            - **風格確認**：{s_style} 已加載。
-            - **避讓區鎖死**：右下角 $588 \\times 90$ px 強制淨空。
-            - **硬貼合啟動**：禁止 AI 對照片進行「二次創作」。
-            - **高亮設定**："{title_in}" 將變為 **{STYLE_CONFIG[s_style]['highlight_color']}**。
+            - **10 大風格**：全數到位。
+            - **物理硬貼合**：指令已鎖死原始像素。
+            - **右下角淨空**：$588 \\times 90$ px 暴力避讓協定。
+            - **引號/括號邏輯**："{title_in}" $\\rightarrow$ **{STYLE_CONFIG[s_style]['highlight_color']}**。
+            - **16:9 比例**：強制 1920x1080。
             """)
     else:
         st.info("請輸入標題開始組裝。")
