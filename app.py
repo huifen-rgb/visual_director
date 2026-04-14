@@ -20,15 +20,24 @@ STYLE_CONFIG = {
 # ==========================================
 # 2. 核心指令引擎 (符號矩陣與避讓)
 # ==========================================
-def build_final_prompt(title, left_in, right_in, style_name, layout, icon_style, ai_autonomy):
+def build_final_prompt(title, left_in, right_in, style_name, ai_autonomy):
     style = STYLE_CONFIG[style_name]
-    TICKER_VOID = "[ABSOLUTE VOID] Bottom-Right ($1332 < X < 1920$, $990 < Y < 1080$) for Ticker."
-    color_logic = f"AI_COLOR: Dynamic based on '{title}' sentiment." if ai_autonomy else f"FIXED: {style['palette']}"
+    
+    # 🛑 後台邏輯鎖定：符號矩陣協定 (Symbol Matrix Protocol)
+    SYMBOL_LOGIC = f"""
+[STRICT SYMBOL TRANSFORMATION]
+- DOUBLE QUOTES (" "): Identify text within " ". Change text color to {style['highlight']}. REMOVE the quotes from the final image.
+- LENTICULAR BRACKETS (【 】): Identify text within 【 】 as Sub-headers. Render text onto a distinct color block background. REMOVE the brackets from the final image.
+- PARENTHESES (( )): KEEP both text and brackets as is. Do not change color.
+- SQUARE BRACKETS ([ ]): These are EFFECT INSTRUCTIONS. Render the visual effect (e.g., icons, stamps, charts) and COMPLETELY DELETE the instruction text.
+"""
+
     return f"""
-[SYSTEM V10.0] CANVAS: 1920x1080. {TICKER_VOID}
-STYLE: {style_name} | {color_logic} | LAYOUT: {layout} | ICON: {icon_style}
-CONTENT: {title} | DATA: {left_in} / {right_in}
-[STRICT] Traditional Chinese ONLY. No redraw on person's faces.
+[SYSTEM V10.1: SYMBOL LOCK] CANVAS: 1920x1080.
+{SYMBOL_LOGIC}
+STYLE: {style_name} | THEME: {style['theme']}
+CONTENT: TITLE={title} | DATA_A={left_in} | DATA_B={right_in}
+[COMPOSITION] 588x90 Ticker Void at Bottom-Right. Traditional Chinese ONLY.
 """
 
 # ==========================================
