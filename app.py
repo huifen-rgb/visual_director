@@ -1,178 +1,104 @@
 import streamlit as st
 
 # ==========================================
-# 1. 視覺風格庫 (10 大專業風格 - 完整回歸)
+# 🛑【Visual Director 系統檢討報告 - 事故編號 20260414】
 # ==========================================
+# 檢討對象：AI 生成邏輯模組
+# 事故描述：
+#   1. 嚴重篡改照片真實性：將賴副總統合照由「端坐」改為「祝酒」，擅自刪除現場人員並修改國父遺像。
+#   2. 避讓區執行不力：無視右下角 588x90 px 的避讓指令，導致星星裝飾遮擋跑馬燈。
+# 根因分析：
+#   AI 盲目追求視覺平衡與「美化」，導致創意權限蓋過了「新聞真實性」與「播報硬體限制」。
+# 修正對策：
+#   1. 升級 [ULTIMATE PIXEL LOCK] 指令：禁止 AI 對上傳資產進行任何語義理解，改為物理貼合。
+#   2. 鎖定 [TICKER ZONE CONTENT VOID]：將右下角定義為內容禁區，僅允許背景擴散，嚴禁任何資產進入。
+# ==========================================
+
 STYLE_CONFIG = {
-    "民生消費 (Fluid Analytics)": {
-        "theme": "Consumer TRENDS, Fluid",
-        "ui": "Smooth organic shapes (blobs) background, Gradational color overlays, Frosted glass panels",
-        "palette": "Soft Beige, Lifestyle Blue, Clear Red",
-        "highlight_color": "Vibrant Sunburst Orange",
-        "layout_mode": "DYNAMIC"
-    },
-    "社會案件 (Justice Alert)": {
-        "theme": "Crime Scene Noir, Legal Justice",
-        "ui": "CCTV grain effects, Map data overlays, Forensic lighting textures",
-        "palette": "Concrete Grey, Caution Yellow, Police Blue",
-        "highlight_color": "Safety Orange",
-        "layout_mode": "GRID"
-    },
-    "體育競技 (Victory Orange)": {
-        "theme": "High-Energy Sports Broadcast",
-        "ui": "Carbon fiber textures, Kinetic speed lines, Motion-blurred stadium spotlights",
-        "palette": "Electric Orange, Graphite Grey, Stark White",
-        "highlight_color": "Vivid Neon Yellow",
-        "layout_mode": "GRID"
-    },
-    "全球財經 (Elite Obsidian)": {
-        "theme": "High-end Financial Dashboard",
-        "ui": "Anodized Aluminum frames, Holographic data streams, Glass refractions",
-        "palette": "Deep Navy, Gold, Cyan Data Lines",
-        "highlight_color": "Electric Cyan",
-        "layout_mode": "GRID"
-    },
-    "突發重磅 (Breaking Alert)": {
-        "theme": "Emergency Alert, High-Gloss Crimson",
-        "ui": "Radial Motion Blur, Glassy UI panels with Red internal glow",
-        "palette": "Signal Red, Stark White, Pure Black",
-        "highlight_color": "Bright Vivid Yellow",
-        "layout_mode": "GRID"
-    },
-    "選情政論 (Democracy Grey)": {
-        "theme": "Political Election Studio",
-        "ui": "Matte Metallic surfaces, Subtle star patterns, Studio spotlighting",
-        "palette": "Slate Grey, Navy Blue, Crimson",
-        "highlight_color": "Vibrant Scarlet Red",
-        "layout_mode": "GRID"
-    },
-    "科技政策 (Cyber Policy)": {
-        "theme": "Digital Policy Hub",
-        "ui": "Poly-grid overlays, Ray-traced refraction, Semi-transparent frosted glass",
-        "palette": "Steel Blue, Neon Cyan, Silver",
-        "highlight_color": "Neon Lime Green",
-        "layout_mode": "DYNAMIC"
-    },
-    "綠能永續 (Eco-Future)": {
-        "theme": "Sustainability & ESG",
-        "ui": "Natural leaf textures, Soft-focus outdoor bokeh, Organic glass shapes",
-        "palette": "Emerald Green, Leaf Green, Soft White",
-        "highlight_color": "Sunlight Gold",
-        "layout_mode": "GRID"
-    },
-    "現代民俗 (Modern Festive)": {
-        "theme": "Modern Folk, Rich Vermilion",
-        "ui": "Lacquered Wood finish, Silk texture, Traditional cloud patterns",
-        "palette": "Vermilion Red, Gold, Deep Charcoal",
-        "highlight_color": "Imperial Gold",
-        "layout_mode": "GRID"
-    },
-    "生醫科技 (Clinical White)": {
-        "theme": "Medical & Bio-Tech",
-        "ui": "Sanitized clinical surfaces, DNA helix motifs, Soft internal light-diffuse",
-        "palette": "Pristine White, Sky Blue, Navy",
-        "highlight_color": "Bright Sky Blue",
-        "layout_mode": "DYNAMIC"
-    }
+    "民生消費 (Fluid Analytics)": {"theme": "Consumer TRENDS", "ui": "Organic shapes, Frosted glass", "palette": "Beige, Blue, Red", "highlight_color": "Vibrant Sunburst Orange", "layout_mode": "DYNAMIC"},
+    "社會案件 (Justice Alert)": {"theme": "Crime Scene Noir", "ui": "CCTV grain, Map overlays", "palette": "Grey, Yellow, Police Blue", "highlight_color": "Safety Orange", "layout_mode": "GRID"},
+    "體育競技 (Victory Orange)": {"theme": "Sports High-Energy", "ui": "Carbon fiber, Speed lines", "palette": "Orange, Graphite, White", "highlight_color": "Vivid Neon Yellow", "layout_mode": "GRID"},
+    "全球財經 (Elite Obsidian)": {"theme": "Financial Dashboard", "ui": "Aluminum, Data streams", "palette": "Navy, Gold, Cyan", "highlight_color": "Electric Cyan", "layout_mode": "GRID"},
+    "突發重磅 (Breaking Alert)": {"theme": "Emergency Crimson", "ui": "Radial Motion Blur, Red glow", "palette": "Signal Red, White, Black", "highlight_color": "Bright Vivid Yellow", "layout_mode": "GRID"},
+    "選情政論 (Democracy Grey)": {"theme": "Political Studio", "ui": "Matte Metallic, Star patterns", "palette": "Slate Grey, Navy, Crimson", "highlight_color": "Vibrant Scarlet Red", "layout_mode": "GRID"},
+    "科技政策 (Cyber Policy)": {"theme": "Digital Hub", "ui": "Poly-grid, Frosted glass", "palette": "Steel Blue, Cyan, Silver", "highlight_color": "Neon Lime Green", "layout_mode": "DYNAMIC"},
+    "綠能永續 (Eco-Future)": {"theme": "Sustainability", "ui": "Natural textures, Bokeh", "palette": "Emerald Green, Leaf Green, White", "highlight_color": "Sunlight Gold", "layout_mode": "GRID"},
+    "現代民俗 (Modern Festive)": {"theme": "Modern Folk", "ui": "Lacquered Wood, Silk textures", "palette": "Vermilion Red, Gold, Charcoal", "highlight_color": "Imperial Gold", "layout_mode": "GRID"},
+    "生醫科技 (Clinical White)": {"theme": "Bio-Tech", "ui": "Clinical surfaces, DNA helix", "palette": "Pristine White, Sky Blue, Navy", "highlight_color": "Bright Sky Blue", "layout_mode": "DYNAMIC"}
 }
 
-# ==========================================
-# 2. 核心組裝邏輯 (疊加所有鋼鐵協定)
-# ==========================================
 def build_final_prompt(title, left_in, right_in, style_name, layout_mode, icon_style):
     style = STYLE_CONFIG[style_name]
     
-    # --- 暴力避讓：針對右下角 588x90 的死守 ---
-    TICKER_ZONE_ENFORCEMENT = """
-[ABSOLUTE VOID ENFORCEMENT: TICKER ZONE]
-- AREA: Bottom-Right ($X > 1332, Y > 990$, $588 x 90$ px).
-- STRICT RULE: This zone is a SACRED VOID. Absolutely ZERO content allowed.
-- NO MARKINGS: No text, icons, UI panels, decorative stars, or graphical accents.
-- BROADCAST RULE: If any pixel touches this zone, the image is UNUSABLE. Treat as a physical hole in the screen.
+    # --- 暴力級避讓：區分背景與內容 ---
+    TICKER_ZONE_MANDATE = """
+[ABSOLUTE CONTENT EXCLUSION: TICKER ZONE]
+- VOID AREA: Bottom-Right ($1332 < X < 1920$, $990 < Y < 1080$).
+- CONTENT LOCK: No text (TITLE, DATA_A, DATA_B) or Uploaded Asset can touch this zone.
+- VISUAL FLOW: Background texture must naturally bleed into this zone, but foreground objects are STRICKLY FORBIDDEN.
 """
 
-    # --- 物理資產鎖死：禁止重繪 ---
-    ASSET_LOCK_PROTOCOL = """
-[ULTIMATE ASSET PROTECTION]
-- UPLOADED FILE: Treat as an "Immutable Physical Object".
-- HARD-PASTING RULE: Use the EXACT pixels. Do NOT redraw, morph, or "beautify".
-- AUTHENTICITY: The realism of the uploaded asset is the SUPREME priority.
+    # --- 像素級鎖死：針對賴副總統照片重繪事故的對策 ---
+    PIXEL_LOCK_PROTOCOL = """
+[ULTIMATE PIXEL LOCK: NEWS INTEGRITY]
+- UPLOADED FILE: Treat as IMMUTABLE RAW DATA.
+- NO HALLUCINATION: Do NOT redraw faces, poses, or objects. Do NOT use it as a reference.
+- HARD-COMPOSITE: Take the EXACT original pixels and place them into the frame. 
+- PROHIBITED: If the AI changes the people's poses (e.g., from sitting to toasting), it is a CATASTROPHIC FAILURE.
 """
 
-    # --- 符號轉換矩陣 ---
     SYMBOL_PROTOCOL = f"""
 [SYMBOL TRANSFORMATION MATRIX]
-1. QUOTE RULE (" "): Text color to {style['highlight_color']}. REMOVE quotes from render.
-2. BRACKET RULE (【 】): Text on Deep Blue Color Block. REMOVE brackets from render.
-3. PARENTHESES RULE (( )): Keep text AND parentheses. NO change to color.
+1. Quotes (" "): Color to {style['highlight_color']}. REMOVE quotes.
+2. Brackets (【 】): Deep Blue Block. REMOVE brackets.
+3. Parentheses (( )): KEEP exactly as is.
 """
 
-    l_cmd = f"[LAYOUT: {layout_mode.upper()}] Ensure visual void in ticker zone."
-    i_cmd = f"[ASSET: {icon_style.upper()}]"
-
     final_prompt = f"""
-[SYSTEM PROTOCOL: BROADCAST GRAPHIC V7.3]
-CANVAS: Fixed 1920x1080 (Strict 16:9).
-{TICKER_ZONE_ENFORCEMENT}
-{ASSET_LOCK_PROTOCOL}
+[SYSTEM V7.8: MASTER BROADCAST CONTROL]
+CANVAS: Fixed 1920x1080 (16:9).
+{TICKER_ZONE_MANDATE}
+{PIXEL_LOCK_PROTOCOL}
 {SYMBOL_PROTOCOL}
-{l_cmd}
-{i_cmd}
 
 [AESTHETIC: {style_name}]
 - THEME: {style['theme']} | UI: {style['ui']} | PALETTE: {style['palette']}
 
-[CONTENT DATA]
+[DATA CONTENT]
 - TITLE: {title}
 - DATA_A: {left_in}
 - DATA_B: {right_in}
 
-[STRICT GUARDRAILS]
-- RENDER TRADITIONAL CHINESE ONLY.
-- REMOVE labels like [日曆效果] or [圖].
-- Physical integration of assets and 16:9 ratio are the TOP priorities.
-- THE BOTTOM-RIGHT ZONE MUST REMAIN PURE BACKGROUND TEXTURE.
+[STRICT_GUARDRAILS]
+- Traditional Chinese ONLY.
+- REMOVE labels like [圖].
+- NO ALTERATION to original photograph pixels.
+- Bottom-right content void is non-negotiable.
 """
     return final_prompt
 
-# ==========================================
-# 3. Streamlit 介面
-# ==========================================
-st.set_page_config(page_title="Visual Director v7.3", layout="wide")
-st.title("🎬 Visual Director v7.3 - 旗艦最終整合版")
+# --- Streamlit 介面 ---
+st.set_page_config(page_title="Visual Director v7.8", layout="wide")
+st.title("🎬 Visual Director v7.8 - 像素級檢討修正版")
 
 col_in, col_out = st.columns([1, 1.2])
 
 with col_in:
     st.subheader("📋 內容編輯區")
-    title_in = st.text_input("新聞主標", placeholder='輸入主標題...')
-    left_in = st.text_area("區塊 A (主要內容)", height=150)
-    right_in = st.text_area("區塊 B (補充說明)", height=150)
+    title_in = st.text_input("新聞主標", placeholder='輸入標題...')
+    left_in = st.text_area("區塊 A", height=150)
+    right_in = st.text_area("區塊 B", height=150)
     
     st.divider()
-    st.subheader("🛠️ 規格參數")
-    s_style = st.selectbox("1. 選擇視覺風格", list(STYLE_CONFIG.keys()))
-    
-    c1, c2 = st.columns(2)
-    with c1:
-        s_layout = st.radio("2. 排版模式", ["固定網格 (Fixed Grid)", "動態流動 (Dynamic Flow)"])
-    with c2:
-        s_icon = st.radio("3. 物件質感", ["2D 簡約 (Flat)", "3D 立體 (Volumetric)"])
+    s_style = st.selectbox("視覺風格", list(STYLE_CONFIG.keys()))
+    s_layout = st.radio("排版模式", ["固定網格 (Fixed Grid)", "動態流動 (Dynamic Flow)"])
+    s_icon = st.radio("物件質感", ["2D 簡約 (Flat)", "3D 立體 (Volumetric)"])
 
 with col_out:
     st.subheader("🚀 生成之 AI 繪圖指令")
     if title_in:
         final_cmd = build_final_prompt(title_in, left_in, right_in, s_style, s_layout, s_icon)
-        st.success(f"已就緒：{s_style} 方案 (暴力鎖定已掛載)")
+        st.error("檢討報告已載入並鎖定指令邏輯")
         st.code(final_cmd, language="markdown")
-        
-        with st.expander("✅ 功能檢查清單 (確認沒被偷刪)", expanded=True):
-            st.markdown(f"""
-            - **10 大風格**：全數到位。
-            - **物理硬貼合**：指令已鎖死原始像素。
-            - **右下角淨空**：$588 \\times 90$ px 暴力避讓協定。
-            - **引號/括號邏輯**："{title_in}" $\\rightarrow$ **{STYLE_CONFIG[s_style]['highlight_color']}**。
-            - **16:9 比例**：強制 1920x1080。
-            """)
     else:
-        st.info("請輸入標題開始組裝。")
+        st.info("輸入標題以啟動。")
