@@ -1,22 +1,22 @@
 import streamlit as st
 from PIL import Image
-from streamlit_cropper import st_cropper
+from streamlit_cropper import st_cropper # 🛑 記得 requirements.txt 要有這行
 import io
 
 # ==========================================
-# 1. 視覺風格庫 (完全體：拒絕精簡，保留所有細緻描述)
+# 1. 視覺風格庫 (旗艦 10 大風格，全細節保留)
 # ==========================================
 STYLE_CONFIG = {
-    "民生消費 (Fluid Analytics)": {"theme": "Consumer TRENDS, Fluid", "ui": "Organic shapes, Frosted glass, Color overlays", "palette": "Beige, Blue, Red", "highlight": "Vibrant Sunburst Orange"},
-    "社會案件 (Justice Alert)": {"theme": "Crime Scene Noir", "ui": "CCTV grain, Map data overlays, Forensic textures", "palette": "Concrete Grey, Caution Yellow, Police Blue", "highlight": "Safety Orange"},
-    "體育競技 (Victory Orange)": {"theme": "Sports High-Energy", "ui": "Carbon fiber, Kinetic speed lines, Stadium spotlights", "palette": "Electric Orange, Graphite Grey, White", "highlight": "Vivid Neon Yellow"},
-    "全球財經 (Elite Obsidian)": {"theme": "Financial Dashboard", "ui": "Anodized Aluminum, Holographic streams, Glass refractions", "palette": "Deep Navy, Gold, Cyan", "highlight": "Electric Cyan"},
-    "突發重磅 (Breaking Alert)": {"theme": "Emergency Crimson", "ui": "Radial Motion Blur, Glassy UI panels, Red internal glow", "palette": "Signal Red, Stark White, Pure Black", "highlight": "Bright Vivid Yellow"},
-    "選情政論 (Democracy Grey)": {"theme": "Political Studio", "ui": "Matte Metallic, Star patterns, Studio spotlighting", "palette": "Slate Grey, Navy, Crimson", "highlight": "Vibrant Scarlet Red"},
-    "科技政策 (Cyber Policy)": {"theme": "Digital Policy Hub", "ui": "Poly-grid, Ray-traced refraction, Circuit patterns", "palette": "Steel Blue, Neon Cyan, Silver", "highlight": "Neon Lime Green"},
-    "綠能永續 (Eco-Future)": {"theme": "Sustainability & ESG", "ui": "Natural leaf textures, Outdoor bokeh, Organic glass", "palette": "Emerald Green, Leaf Green, Soft White", "highlight": "Sunlight Gold"},
-    "現代民俗 (Modern Festive)": {"theme": "Modern Folk, Rich Vermilion", "ui": "Lacquered Wood finish, Silk texture, Traditional cloud patterns", "palette": "Vermilion Red, Gold, Deep Charcoal", "highlight": "Imperial Gold"},
-    "生醫科技 (Clinical White)": {"theme": "Medical & Bio-Tech", "ui": "Sanitized clinical surfaces, DNA helix, Soft light-diffuse", "palette": "Pristine White, Sky Blue, Navy", "highlight": "Bright Sky Blue"}
+    "民生消費 (Fluid Analytics)": {"theme": "Consumer TRENDS, Fluid", "ui": "Organic shapes, Frosted glass", "palette": "Beige, Blue, Red", "highlight": "Vibrant Sunburst Orange"},
+    "社會案件 (Justice Alert)": {"theme": "Crime Scene Noir", "ui": "CCTV grain, Map overlays", "palette": "Grey, Yellow, Police Blue", "highlight": "Safety Orange"},
+    "體育競技 (Victory Orange)": {"theme": "Sports High-Energy", "ui": "Carbon fiber, Speed lines", "palette": "Orange, Graphite", "highlight": "Vivid Neon Yellow"},
+    "全球財經 (Elite Obsidian)": {"theme": "Financial Dashboard", "ui": "Aluminum, Data streams", "palette": "Navy, Gold, Cyan", "highlight": "Electric Cyan"},
+    "突發重磅 (Breaking Alert)": {"theme": "Emergency Crimson", "ui": "Radial Blur, Red glow", "palette": "Signal Red, White, Black", "highlight": "Bright Vivid Yellow"},
+    "選情政論 (Democracy Grey)": {"theme": "Political Studio", "ui": "Matte Metallic, Star patterns", "palette": "Slate Grey, Navy, Crimson", "highlight": "Vibrant Scarlet Red"},
+    "科技政策 (Cyber Policy)": {"theme": "Digital Hub", "ui": "Poly-grid, Frosted glass", "palette": "Steel Blue, Neon Cyan, Silver", "highlight": "Neon Lime Green"},
+    "綠能永續 (Eco-Future)": {"theme": "Sustainability & ESG", "ui": "Natural textures, Bokeh", "palette": "Emerald Green, Leaf Green, White", "highlight": "Sunlight Gold"},
+    "現代民俗 (Modern Festive)": {"theme": "Modern Folk, Rich Vermilion", "ui": "Lacquered Wood finish, Silk texture", "palette": "Vermilion Red, Gold, Charcoal", "highlight": "Imperial Gold"},
+    "生醫科技 (Clinical White)": {"theme": "Bio-Tech", "ui": "Clinical surfaces, DNA helix", "palette": "Pristine White, Sky Blue, Navy", "highlight": "Bright Sky Blue"}
 }
 
 # 物理框架位置 (針對 1, 2, 3 張照片的吸附座標)
@@ -27,26 +27,28 @@ LAYOUT_PRESETS = {
 }
 
 # ==========================================
-# 2. 核心組裝引擎 (符號矩陣、避讓、物理鎖定)
+# 2. 核心組裝引擎 (修正參數名稱為 ai_autonomy)
 # ==========================================
-def build_final_prompt(title, left_in, right_in, style_name, layout, icon_style, ai_color=True, has_image=False):
+def build_final_prompt(title, left_in, right_in, style_name, layout, icon_style, ai_autonomy=True, has_image=False):
     style = STYLE_CONFIG[style_name]
     
-    # 權重 1: 避讓區
     TICKER_ZONE = "[ABSOLUTE VOID] Bottom-Right ($1332 < X < 1920$, $990 < Y < 1080$) for Ticker."
     
-    # 權重 2: 符號矩陣
+    # AI 配色與高亮自主權邏輯
+    if ai_autonomy:
+        color_logic = f"AI AUTONOMY: Select striking palette & highlight based on '{title}' sentiment."
+    else:
+        color_logic = f"FIXED: Palette {style['palette']}, Highlight {style['highlight']}"
+
     SYMBOL_MATRIX = f"""
 [SYMBOL MATRIX]
-1. Quotes (" "): Apply Highlight Color, REMOVE symbols.
+1. Quotes (" "): Color per Highlight logic, REMOVE symbols.
 2. Brackets (【 】): Deep Blue Block, REMOVE symbols.
 3. Parentheses (( )): KEEP as is.
 """
-    # 權重 3: AI 配色自主權
-    color_logic = f"AI AUTONOMY: Select striking palette & highlight based on '{title}' sentiment." if ai_color else f"FIXED: {style['palette']}, Highlight: {style['highlight']}"
 
     return f"""
-[SYSTEM V9.2] CANVAS: 1920x1080. {TICKER_ZONE}
+[SYSTEM V9.3] CANVAS: 1920x1080. {TICKER_ZONE}
 {SYMBOL_MATRIX}
 [PIXEL LOCK] UPLOADED PHOTOS ARE RAW MATTER. NO REDRAWING.
 STYLE: {style_name} | THEME: {style['theme']} | UI: {style['ui']}
@@ -58,20 +60,20 @@ STYLE: {style_name} | THEME: {style['theme']} | UI: {style['ui']}
 # ==========================================
 # 3. Streamlit 介面 (全疊加布局)
 # ==========================================
-st.set_page_config(page_title="Visual Director v9.2", layout="wide")
-st.title("🎬 Visual Director v9.2 - 旗艦功能全疊加版")
+st.set_page_config(page_title="Visual Director v9.3", layout="wide")
+st.title("🎬 Visual Director v9.3 - 旗艦參數修正版")
 
 col_in, col_out = st.columns([1, 1.2])
 
 with col_in:
-    # 1. 文字資產 (保留)
+    # 1. 文字資產
     st.subheader("📋 1. 新聞文字資產")
-    title_in = st.text_input("新聞主標")
+    title_in = st.text_input("新聞主標", placeholder="輸入標題...")
     c_a, c_b = st.columns(2)
     with c_a: left_in = st.text_area("區塊 A 內文", height=100)
     with c_b: right_in = st.text_area("區塊 B 補充", height=100)
     
-    # 2. 多圖視覺裁切 (重點疊加：拖曳裁切)
+    # 2. 多圖視覺裁切 (拖曳裁切)
     st.divider()
     st.subheader("📸 2. 照片視覺處理 (支援多圖拖曳)")
     uploaded_files = st.file_uploader("上傳照片 (支援多選)", type=["jpg", "png", "jpeg"], accept_multiple_files=True)
@@ -79,15 +81,15 @@ with col_in:
     processed_assets = []
     if uploaded_files:
         photo_count = len(uploaded_files)
-        # 取得對應數量的框架規格
         specs = LAYOUT_PRESETS.get(photo_count, LAYOUT_PRESETS[1])
         
         for idx, file in enumerate(uploaded_files):
             if idx < len(specs):
                 with st.expander(f"視覺裁切：{specs[idx]['label']}", expanded=(idx==0)):
                     raw_img = Image.open(file).convert("RGB")
-                    # 🛑 拖曳裁切：比例自動鎖定為該位置的規格
                     aspect = specs[idx]['size'][0] / specs[idx]['size'][1]
+                    
+                    # 🛑 視覺化拖曳裁切
                     cropped_img = st_cropper(raw_img, aspect_ratio=aspect, box_color='#FF0000', key=f"crop_{idx}")
                     
                     final_p = cropped_img.resize(specs[idx]['size'], Image.Resampling.LANCZOS)
@@ -107,16 +109,21 @@ with col_out:
     # 產出 1: 指令
     st.subheader("🚀 第一產出：AI 繪圖指令")
     if title_in:
-        final_cmd = build_final_prompt(title_in, left_in, right_in, s_style, s_layout, s_icon, ai_autonomy=ai_sovereignty, has_image=(len(uploaded_files)>0))
+        # 修正後的呼叫：ai_autonomy=ai_sovereignty
+        final_cmd = build_final_prompt(
+            title_in, left_in, right_in, s_style, s_layout, s_icon, 
+            ai_autonomy=ai_sovereignty, 
+            has_image=(len(uploaded_files)>0)
+        )
         st.code(final_cmd, language="markdown")
     
-    # 產出 2: 物理硬合成 (下載)
+    # 產出 2: 物理硬合成
     st.divider()
     st.subheader("🔥 第二產出：物理硬合成成品")
     bg_file = st.file_uploader("📥 上傳 AI 生成的背景圖", type=["png", "jpg"])
     
     if bg_file and processed_assets:
-        if st.button("點擊下載前：執行硬合成預覽"):
+        if st.button("執行硬合成預覽"):
             bg_img = Image.open(bg_file).convert("RGBA")
             for asset in processed_assets:
                 bg_img.paste(asset['img'].convert("RGBA"), asset['pos'], asset['img'].convert("RGBA"))
@@ -124,4 +131,4 @@ with col_out:
             
             buf = io.BytesIO()
             bg_img.save(buf, format="PNG")
-            st.download_button("💾 導出 1920x1080 最終成品圖", data=buf.getvalue(), file_name="CTS_Final.png")
+            st.download_button("💾 下載 1920x1080 成品圖", data=buf.getvalue(), file_name="CTS_Final_CG.png", mime="image/png")
