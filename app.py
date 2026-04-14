@@ -89,7 +89,7 @@ with col_in:
     
     if uploaded_file is not None:
         image = Image.open(uploaded_file)
-        st.image(image, caption="已偵測到上傳資產：系統將啟動像素鎖定協定", use_container_width=True)
+        st.image(image, caption="已偵測到上傳資產：系統將啟動像素鎖定協定", use_column_width=True)
     
     st.divider()
     s_style = st.selectbox("1. 選擇視覺風格", list(STYLE_CONFIG.keys()))
