@@ -1,10 +1,10 @@
 import streamlit as st
 from PIL import Image
-from streamlit_cropper import st_cropper # 🛑 記得 requirements.txt 要有這行
+from streamlit_cropper import st_cropper
 import io
 
 # ==========================================
-# 1. 視覺風格庫 (旗艦 10 大風格，全細節保留)
+# 1. 視覺風格庫 (旗艦 10 大風格，全量鎖定)
 # ==========================================
 STYLE_CONFIG = {
     "民生消費 (Fluid Analytics)": {"theme": "Consumer TRENDS, Fluid", "ui": "Organic shapes, Frosted glass", "palette": "Beige, Blue, Red", "highlight": "Vibrant Sunburst Orange"},
@@ -27,14 +27,12 @@ LAYOUT_PRESETS = {
 }
 
 # ==========================================
-# 2. 核心組裝引擎 (修正參數名稱為 ai_autonomy)
+# 2. 核心組裝引擎
 # ==========================================
 def build_final_prompt(title, left_in, right_in, style_name, layout, icon_style, ai_autonomy=True, has_image=False):
     style = STYLE_CONFIG[style_name]
-    
     TICKER_ZONE = "[ABSOLUTE VOID] Bottom-Right ($1332 < X < 1920$, $990 < Y < 1080$) for Ticker."
     
-    # AI 配色與高亮自主權邏輯
     if ai_autonomy:
         color_logic = f"AI AUTONOMY: Select striking palette & highlight based on '{title}' sentiment."
     else:
@@ -42,38 +40,35 @@ def build_final_prompt(title, left_in, right_in, style_name, layout, icon_style,
 
     SYMBOL_MATRIX = f"""
 [SYMBOL MATRIX]
-1. Quotes (" "): Color per Highlight logic, REMOVE symbols.
+1. Quotes (" "): Color per Highlight, REMOVE symbols.
 2. Brackets (【 】): Deep Blue Block, REMOVE symbols.
 3. Parentheses (( )): KEEP as is.
 """
-
     return f"""
-[SYSTEM V9.3] CANVAS: 1920x1080. {TICKER_ZONE}
+[SYSTEM V9.4] CANVAS: 1920x1080. {TICKER_ZONE}
 {SYMBOL_MATRIX}
 [PIXEL LOCK] UPLOADED PHOTOS ARE RAW MATTER. NO REDRAWING.
-STYLE: {style_name} | THEME: {style['theme']} | UI: {style['ui']}
-{color_logic} | LAYOUT: {layout} | ICON: {icon_style}
+STYLE: {style_name} | {color_logic}
+LAYOUT: {layout} | ICON: {icon_style}
 [CONTENT] TITLE: {title} | DATA_A: {left_in} | DATA_B: {right_in}
-[STRICT] Traditional Chinese ONLY. Faces must be 100% authentic.
+[STRICT] Traditional Chinese ONLY. No poses alteration.
 """
 
 # ==========================================
-# 3. Streamlit 介面 (全疊加布局)
+# 3. Streamlit 介面
 # ==========================================
-st.set_page_config(page_title="Visual Director v9.3", layout="wide")
-st.title("🎬 Visual Director v9.3 - 旗艦參數修正版")
+st.set_page_config(page_title="Visual Director v9.4", layout="wide")
+st.title("🎬 Visual Director v9.4 - 比例對位修正版")
 
 col_in, col_out = st.columns([1, 1.2])
 
 with col_in:
-    # 1. 文字資產
     st.subheader("📋 1. 新聞文字資產")
     title_in = st.text_input("新聞主標", placeholder="輸入標題...")
     c_a, c_b = st.columns(2)
     with c_a: left_in = st.text_area("區塊 A 內文", height=100)
     with c_b: right_in = st.text_area("區塊 B 補充", height=100)
     
-    # 2. 多圖視覺裁切 (拖曳裁切)
     st.divider()
     st.subheader("📸 2. 照片視覺處理 (支援多圖拖曳)")
     uploaded_files = st.file_uploader("上傳照片 (支援多選)", type=["jpg", "png", "jpeg"], accept_multiple_files=True)
@@ -87,37 +82,35 @@ with col_in:
             if idx < len(specs):
                 with st.expander(f"視覺裁切：{specs[idx]['label']}", expanded=(idx==0)):
                     raw_img = Image.open(file).convert("RGB")
-                    aspect = specs[idx]['size'][0] / specs[idx]['size'][1]
                     
-                    # 🛑 視覺化拖曳裁切
-                    cropped_img = st_cropper(raw_img, aspect_ratio=aspect, box_color='#FF0000', key=f"crop_{idx}")
+                    # 🛑 核心修正處：直接把 size (寬, 高) 傳進去，不要做除法
+                    aspect_tuple = specs[idx]['size'] 
+                    
+                    cropped_img = st_cropper(
+                        raw_img, 
+                        aspect_ratio=aspect_tuple, # 傳入 (1018, 708)
+                        box_color='#FF0000', 
+                        key=f"crop_{idx}"
+                    )
                     
                     final_p = cropped_img.resize(specs[idx]['size'], Image.Resampling.LANCZOS)
                     st.image(final_p, caption=f"照片 {idx+1} 預覽", use_column_width=True)
                     processed_assets.append({'img': final_p, 'pos': specs[idx]['pos']})
 
-    # 3. 視覺規格 (保留)
     st.divider()
     st.subheader("🛠️ 3. 視覺規格設定")
     s_style = st.selectbox("視覺風格庫", list(STYLE_CONFIG.keys()))
-    ai_sovereignty = st.toggle("✨ 啟動 AI 視覺主權 (自主配色)", value=True)
+    ai_sovereignty = st.toggle("✨ 啟動 AI 視覺主權", value=True)
     r1, r2 = st.columns(2)
     with r1: s_layout = st.radio("排版模式", ["GRID", "DYNAMIC"])
     with r2: s_icon = st.radio("物件質感", ["Flat", "Volumetric"])
 
 with col_out:
-    # 產出 1: 指令
     st.subheader("🚀 第一產出：AI 繪圖指令")
     if title_in:
-        # 修正後的呼叫：ai_autonomy=ai_sovereignty
-        final_cmd = build_final_prompt(
-            title_in, left_in, right_in, s_style, s_layout, s_icon, 
-            ai_autonomy=ai_sovereignty, 
-            has_image=(len(uploaded_files)>0)
-        )
+        final_cmd = build_final_prompt(title_in, left_in, right_in, s_style, s_layout, s_icon, ai_autonomy=ai_sovereignty, has_image=(len(uploaded_files)>0))
         st.code(final_cmd, language="markdown")
     
-    # 產出 2: 物理硬合成
     st.divider()
     st.subheader("🔥 第二產出：物理硬合成成品")
     bg_file = st.file_uploader("📥 上傳 AI 生成的背景圖", type=["png", "jpg"])
@@ -131,4 +124,4 @@ with col_out:
             
             buf = io.BytesIO()
             bg_img.save(buf, format="PNG")
-            st.download_button("💾 下載 1920x1080 成品圖", data=buf.getvalue(), file_name="CTS_Final_CG.png", mime="image/png")
+            st.download_button("💾 下載最終成品圖", data=buf.getvalue(), file_name="CTS_Final_CG.png", mime="image/png")
