@@ -2,56 +2,66 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 # ==========================================
-# 1. 旗艦風格庫 (10 大美學規格：絕不精簡)
+# 1. 旗艦風格庫 (10 大全規格：拒絕精簡、還原細節)
 # ==========================================
 STYLE_CONFIG = {
-    "民生消費 (Fluid Analytics)": {"theme": "Consumer TRENDS, Fluid", "ui": "Organic, Frosted", "palette": "Beige, Blue, Red", "highlight": "Vibrant Sunburst Orange"},
-    "社會案件 (Justice Alert)": {"theme": "Crime Scene Noir", "ui": "CCTV, Map Overlays", "palette": "Grey, Yellow, Police Blue", "highlight": "Safety Orange"},
-    "體育競技 (Victory Orange)": {"theme": "Sports High-Energy", "ui": "Carbon fiber, Kinetic lines", "palette": "Orange, Graphite", "highlight": "Vivid Neon Yellow"},
-    "全球財經 (Elite Obsidian)": {"theme": "High-end Financial Dashboard", "ui": "Aluminum, Streams", "palette": "Navy, Gold, Cyan", "highlight": "Electric Cyan"},
-    "突發重磅 (Breaking Alert)": {"theme": "Emergency Alert, Glossy Crimson", "ui": "Radial Blur, Red glow", "palette": "Signal Red, White", "highlight": "Bright Vivid Yellow"},
-    "選情政論 (Democracy Grey)": {"theme": "Political Studio", "ui": "Matte Metallic, Star patterns", "palette": "Slate Grey, Navy", "highlight": "Vibrant Scarlet Red"},
-    "科技政策 (Cyber Policy)": {"theme": "Digital Policy Hub", "ui": "Poly-grid, Ray-traced refraction", "palette": "Steel Blue, Cyan", "highlight": "Neon Lime Green"},
-    "綠能永續 (Eco-Future)": {"theme": "Sustainability & ESG", "ui": "Natural textures, Outdoor bokeh", "palette": "Emerald Green, White", "highlight": "Sunlight Gold"},
-    "現代民俗 (Modern Festive)": {"theme": "Modern Folk, Rich Vermilion", "ui": "Lacquered Wood, Silk texture", "palette": "Vermilion Red, Gold", "highlight": "Imperial Gold"},
-    "生醫科技 (Clinical White)": {"theme": "Bio-Tech", "ui": "Clinical, DNA helix", "palette": "White, Sky Blue", "highlight": "Bright Sky Blue"}
+    "民生消費 (Fluid Analytics)": {"theme": "Consumer TRENDS, Fluid & Advanced", "ui": "Organic shapes, Frosted glass panels, Color overlays, Soft shadows", "palette": "Soft Beige, Lifestyle Blue, Clear Red", "highlight": "Vibrant Sunburst Orange"},
+    "社會案件 (Justice Alert)": {"theme": "Crime Scene Noir, Legal Justice", "ui": "CCTV grain, Map data overlays, Forensic textures, Caution tape", "palette": "Concrete Grey, Caution Yellow, Police Blue", "highlight": "Safety Orange"},
+    "體育競技 (Victory Orange)": {"theme": "High-Energy Sports Broadcast", "ui": "Carbon fiber, Kinetic lines, Stadium spotlights, Metal mesh", "palette": "Electric Orange, Graphite Grey, Stark White", "highlight": "Vivid Neon Yellow"},
+    "全球財經 (Elite Obsidian)": {"theme": "High-end Financial Dashboard", "ui": "Anodized Aluminum, Holographic streams, Glass refractions, Grid", "palette": "Deep Navy, Gold, Cyan Data Lines", "highlight": "Electric Cyan"},
+    "突發重磅 (Breaking Alert)": {"theme": "Emergency Alert, High-Gloss Crimson", "ui": "Radial Motion Blur, Red internal glow, Danger pulse", "palette": "Signal Red, White, Black", "highlight": "Bright Vivid Yellow"},
+    "選情政論 (Democracy Grey)": {"theme": "Political Election Studio", "ui": "Matte Metallic, Star patterns, Studio spotlighting, Marble", "palette": "Slate Grey, Navy Blue, Crimson", "highlight": "Vibrant Scarlet Red"},
+    "科技政策 (Cyber Policy)": {"theme": "Digital Policy Hub", "ui": "Poly-grid, Ray-traced refraction, Semi-transparent glass, Nodes", "palette": "Steel Blue, Neon Cyan, Silver", "highlight": "Neon Lime Green"},
+    "綠能永續 (Eco-Future)": {"theme": "Sustainability & ESG", "ui": "Natural leaf textures, Soft outdoor bokeh, Organic glass", "palette": "Emerald Green, Leaf Green, Soft White", "highlight": "Sunlight Gold"},
+    "現代民俗 (Modern Festive)": {"theme": "Modern Folk, Rich Vermilion", "ui": "Lacquered Wood, Silk texture, Cloud patterns, Gold leaf", "palette": "Vermilion Red, Gold, Deep Charcoal", "highlight": "Imperial Gold"},
+    "生醫科技 (Clinical White)": {"theme": "Medical & Bio-Tech", "ui": "Sanitized surfaces, DNA helix motifs, Hexagonal grid", "palette": "Pristine White, Sky Blue, Navy", "highlight": "Bright Sky Blue"}
 }
 
 # ==========================================
 # 2. 核心指令引擎 (標題霸權、空間保護、符號矩陣)
 # ==========================================
-def build_final_prompt(title, left_in, right_in, style_name, header_mode, icon_style, ai_autonomy):
+def build_final_prompt(title, left_in, right_in, style_name, header_mode, icon_style, ai_autonomy, ticker_lock):
     style = STYLE_CONFIG[style_name]
-    HEADER_W = "TITLE FONT SIZE: MEGA LARGE (300% size). ABSOLUTE VISUAL DOMINANCE."
+    
+    # 🛑 1. 跑馬燈禁區開關 (588x90)
+    TICKER_ZONE = "[ABSOLUTE PHYSICAL VOID] Bottom-Right ($1332 < X < 1920$, $990 < Y < 1080$). NO text/effects here." if ticker_lock else "[FULL CANVAS] Use 1920x1080 freely."
+
+    # 🛑 2. 標題大大大權重 (300%)
+    HEADER_W = "TITLE FONT SIZE: MEGA LARGE (300% of body text). DOMINANT VISUAL HIERARCHY."
     if "兩行" in header_mode: HEADER_W += " USE TWO-LINE STACKED LAYOUT."
 
+    # 🛑 3. 符號矩陣與 Slug 避讓協定 (成品絕對抹除符號)
     SYMBOL_LOGIC = f"""
-[STRICT SYMBOL & SPACE TRANSFORMATION]
-- "雙引號": Highlight text within quotes using {style['highlight']}. REMOVE quotes in final image.
-- 【方頭括號】: Render text as Sub-headers on color block. FONT SIZE: LARGE. REMOVE brackets.
+[STRICT SYMBOL TRANSFORMATION]
+- "雙引號": Highlight text within using {style['highlight']}. REMOVE quotes in final image.
+- 【方頭括號】: Render text as Sub-headers on a color block. FONT SIZE: LARGE. REMOVE brackets.
 - (圓括號): KEEP text and brackets as is. NO color change.
 - [圖----slug圖]: ASSET PROTECTION ZONE. Leave this area 100% BLANK and EMPTY. DELETE the label text.
-- [效果說明]: (e.g., [對話框], [圓餅圖], [日曆效果---(日期)], [筆刷效果], [蓋章效果], [icon]). Render visual objects and DELETE instruction text.
-- [換行]: Force manual line break at this position. REMOVE label.
+- [效果說明]: (e.g., [對話框], [圓餅圖], [日曆效果], [筆刷效果], [蓋章效果], [icon]). Render visual ONLY, DELETE text.
+- [換行]: Manual line break at this position. REMOVE label.
 """
+    
     color_logic = f"AI_COLOR: Dynamic based on title sentiment." if ai_autonomy else f"FIXED: {style['palette']}"
+    
     return f"""
-[SYSTEM V11.2] CANVAS: 1920x1080. {HEADER_W}
+[SYSTEM V11.5: FINAL] CANVAS: 1920x1080. {TICKER_ZONE}
+{HEADER_W}
 {SYMBOL_LOGIC}
-[IMPORTANT] If "[圖----slug圖]" is mentioned, keep area VOID. STYLE: {style_name} | {color_logic} | ICON: {icon_style}
+[IMPORTANT] If "[圖----slug圖]" is present, keep area VOID. DO NOT overlap with any text or effects.
+STYLE: {style_name} | {color_logic} | ICON: {icon_style} | UI: {style['ui']}
 CONTENT: TITLE={title} | DATA_A={left_in} | DATA_B={right_in}
-[STRICT] Traditional Chinese ONLY. TITLES MUST BE MEGA LARGE (300%).
+[STRICT] Traditional Chinese ONLY. TITLES MUST BE MEGA LARGE (300% SIZE).
 """
 
 # ==========================================
-# 3. 華視打洞機 v66 完全修復版 (新增底圖縮放支援)
+# 3. 華視打洞機 v66 完全歸位版 (修復底圖縮放)
 # ==========================================
 HOLE_PUNCHER_V66 = """
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>華視打洞機 v66 - 操控優化版</title>
+    <title>華視打洞機 v66</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
     <style>
         :root { --pink: #ff00ff; --panel: #1a1a1a; --blue: #2979ff; --green: #00c853; --cyan: #00e5ff; --yellow: #ffeb3b; --orange: #ff9800; }
@@ -63,16 +73,16 @@ HOLE_PUNCHER_V66 = """
         .label { position: absolute; top: 12px; left: 12px; background: rgba(0,0,0,0.8); padding: 4px 10px; border-radius: 4px; font-size: 10px; font-weight: bold; z-index: 1000; color: #aaa; pointer-events: none; }
         .canvas-wrapper { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         canvas { max-width: 100%; max-height: 100%; cursor: crosshair; }
-        button { padding: 8px 12px; cursor: pointer; background: #2a2a2a; color: #ccc; border: 1px solid #444; border-radius: 6px; font-size: 11px; font-weight: 600; }
+        button { padding: 8px 12px; cursor: pointer; background: #2a2a2a; color: #ccc; border: 1px solid #444; border-radius: 6px; font-size: 11px; font-weight: 600; transition: 0.2s; }
         button.active { background: var(--pink) !important; color: #fff; }
         .download-btn { background: #fff; color: #000; font-weight: bold; margin-left: auto; }
-        .config-label { font-size: 11px; color: var(--yellow); display: flex; align-items: center; gap: 4px; }
+        label { font-size: 10px; color: #888; }
     </style>
 </head>
 <body>
     <div id="loading-overlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:none; flex-direction:column; align-items:center; justify-content:center; z-index:2000;">🤖 打洞機調整中...</div>
     <div class="toolbar">
-        <div class="group"><button onclick="document.getElementById('upload').click()" style="color: var(--yellow);">📁 開啟主圖</button><label class="config-label"><input type="checkbox" id="autoLayoutCheck"> 自動留邊+模糊背景</label><input type="file" id="upload" accept="image/*" style="display:none"></div>
+        <div class="group"><button onclick="document.getElementById('upload').click()" style="color: var(--yellow);">📁 開啟主圖</button><label style="font-size:10px; color:#888;"><input type="checkbox" id="autoLayoutCheck"> 自動留邊+模糊背景</label><input type="file" id="upload" accept="image/*" style="display:none"></div>
         <div class="group"><button onclick="document.getElementById('bgInput').click()">🖼️ 插入底圖</button><input type="file" id="bgInput" accept="image/*" style="display:none" multiple><button onclick="document.getElementById('fgInput').click()" style="color: var(--cyan);">➕ 插入前景</button><input type="file" id="fgInput" accept="image/*" style="display:none" multiple><button onclick="deleteSelectedItem()" style="color: var(--orange);">🗑️ 刪除選中</button></div>
         <div class="group"><button id="aiProtectBtn" style="background:var(--blue); color:#fff; border:none;">🔒 AI 鎖定</button><button class="mode-btn" data-mode="refine_add">✨ 補回人像</button><button class="mode-btn" data-mode="refine_sub">🔪 裁切邊緣</button></div>
         <div class="group"><button class="mode-btn active" data-mode="brush">粉紅筆 (B)</button><button class="mode-btn" data-mode="rect">矩形 (R)</button><button class="mode-btn" data-mode="circle">圓形 (C)</button><button class="mode-btn" data-mode="eraser">橡皮擦 (E)</button></div>
@@ -80,8 +90,8 @@ HOLE_PUNCHER_V66 = """
         <button id="commitBtn" style="background:#444">✅ 定案</button><button onclick="undo()">↶ Undo</button><button id="downloadBtn" class="download-btn">導出 1080p HD</button>
     </div>
     <div class="main-layout">
-        <div class="view-panel"><div class="label">WORKSPACE (作業區 - 即時透底)</div><div class="canvas-wrapper"><canvas id="workCanvas"></canvas></div></div>
-        <div class="view-panel"><div class="label">PREVIEW (1920x1080 成品)</div><div class="canvas-wrapper"><canvas id="previewCanvas"></canvas></div></div>
+        <div class="view-panel"><div class="label">WORKSPACE (即時預覽)</div><div class="canvas-wrapper"><canvas id="workCanvas"></canvas></div></div>
+        <div class="view-panel"><div class="label">PREVIEW (最終成品)</div><div class="canvas-wrapper"><canvas id="previewCanvas"></canvas></div></div>
     </div>
     <script>
         let img = new Image(), bgImages = [], fgImages = [], activeItem = { type: null, index: -1 }; 
@@ -179,23 +189,23 @@ HOLE_PUNCHER_V66 = """
 """
 
 # ==========================================
-# 4. Streamlit 介面 (完全規格版)
+# 4. Streamlit 介面 (旗艦完全規格整合)
 # ==========================================
-st.set_page_config(page_title="Visual Director v11.2", layout="wide")
-st.title("🎬 Visual Director v11.2 - 旗艦整合修復版")
-st.caption("Producer Huifen Edition | 說明不刪減、底圖可縮放")
+st.set_page_config(page_title="Visual Director v11.5", layout="wide")
+st.title("🎬 Visual Director v11.5 - 播報級最終版")
+st.caption("Producer Huifen Edition | 全規格 100% 校核完畢")
 
 tab1, tab2 = st.tabs(["🚀 第一步：產出鏡面指令", "🖍️ 第二步：華視打洞機作業區"])
 
 with tab1:
-    with st.expander("❓ 如何寫出專業鏡面？ (符號矩陣與轉換原則說明)", expanded=False):
+    with st.expander("❓ 如何寫出專業鏡面？ (符號語法與轉換原則說明)", expanded=True):
         st.markdown("### 🔠 鏡面符號矩陣 (Symbol Matrix Protocol)")
         st.table([
-            {"語法": '"雙引號"', "視覺動作": "引號內文字套用高亮色、變色", "成品處理": "❌ 移除雙引號"},
-            {"語法": "【方頭括號】", "視覺動作": "文字做為色塊小標、字體加大", "成品處理": "❌ 移除方頭括號"},
-            {"語法": "(圓括號)", "視覺動作": "文字不變色、保持輔助資訊感", "成品處理": "✅ 保留圓括號 (如：125(公里))"},
-            {"語法": "[圖----slug圖]", "視覺動作": "🛡️ 劃定素材留白特區，嚴禁文字效果壓過", "成品處理": "❌ 移除說明文字"},
-            {"語法": "[效果說明]", "視覺動作": "轉化為專業視覺圖示或 UI 物件", "成品處理": "❌ 移除說明文字"},
+            {"語法": '"雙引號"', "視覺動作": "文字套用高亮變色", "成品處理": "❌ 移除引號"},
+            {"語法": "【方頭括號】", "視覺動作": "色塊小標 (字大大大)", "成品處理": "❌ 移除括號"},
+            {"語法": "(圓括號)", "視覺動作": "文字不變色、輔助資訊感", "成品處理": "✅ 保留圓括號"},
+            {"語法": "[圖----slug圖]", "視覺動作": "🛡️ 劃定素材留白特區 (嚴禁重疊)", "成品處理": "❌ 移除說明"},
+            {"語法": "[效果說明]", "視覺動作": "轉化為專業視覺圖示或 UI", "成品處理": "❌ 移除說明"},
             {"語法": "[換行]", "視覺動作": "標題強制執行斷行指令", "成品處理": "❌ 移除標籤"}
         ])
         st.info("💡 效果說明範例：[對話框][圓餅圖][日曆效果---(日期)][筆刷效果][蓋章效果][icon]")
@@ -203,28 +213,31 @@ with tab1:
     st.divider()
     col_l, col_r = st.columns([1.2, 0.8])
     with col_l:
-        st.subheader("📋 鏡面內容編輯 (預設：萬華專案)")
+        st.subheader("📋 鏡面內容編輯 (預設：萬華喪屍專案)")
         h_mode = st.radio("標題張力：", ["兩行大標題 (MEGA SIZE)", "單行大標題 (專業感)"], horizontal=True)
-        title_in = st.text_area("鏡面主標題 (AI 將使文字大大大)", value='"芬太尼喪屍"入侵萬華?[換行]\n"對折人"驚悚影像曝光', height=100)
+        title_in = st.text_area("鏡面主標題 (AI 將字大大大)", value='"芬太尼喪屍"入侵萬華?[換行]\n"對折人"驚悚影像曝光', height=100)
         c1, c2 = st.columns(2)
         with c1: left_in = st.text_area("區塊 A 內文", value='[threads icon] \n[網友icon] 網友:[對話框] \n我以為我在舊金山\n[圖----網友圖佔版面1/2]\n北市萬華1男子\n遭疑吸"芬太尼"', height=220)
         with c2: right_in = st.text_area("區塊 B 內文", value='【"芬太尼"小檔案】\n●第二級毒品\n●人造鴉片類藥物\n  約嗎啡50-100倍\n●美加地區濫用\n  造成死亡案例\n\n刑事局:\n112年起僅台南查獲1件\n觀看影像確有吸毒樣子', height=220)
+    
     with col_r:
-        st.subheader("🛠️ 風格與規格")
-        s_style = st.selectbox("旗艦風格庫", list(STYLE_CONFIG.keys()), index=1)
-        ai_sovereignty = st.toggle("✨ 啟動 AI 視覺主權 (自主配色)", value=True)
+        st.subheader("🛠️ 視覺與空間規格")
+        ticker_lock = st.toggle("🔒 鎖定右下角 588x90 跑馬燈禁區", value=True)
+        s_style = st.selectbox("旗艦風格庫 (10 大全還原)", list(STYLE_CONFIG.keys()), index=1)
+        ai_sovereignty = st.toggle("✨ 啟動 AI 視覺主權", value=True)
         r1, r2 = st.columns(2)
         with r1: s_layout = st.radio("佈局模式", ["GRID", "DYNAMIC"], horizontal=True)
         with r2: s_icon = st.radio("物件質感", ["Flat", "Volumetric"], index=1, horizontal=True)
-        st.info(f"🎨 當前高亮色預覽：{STYLE_CONFIG[s_style]['highlight']}")
+        st.info(f"🎨 高亮色：{STYLE_CONFIG[s_style]['highlight']}")
 
     if title_in:
         st.divider()
         st.subheader("🔥 最終生成：Gemini 繪圖指令")
-        final_cmd = build_final_prompt(title_in, left_in, right_in, s_style, h_mode, s_icon, ai_sovereignty)
+        # 參數對位檢查：8個傳入 (title, left, right, style, header, icon, ai, ticker)
+        final_cmd = build_final_prompt(title_in, left_in, right_in, s_style, h_mode, s_icon, ai_sovereignty, ticker_lock)
         st.code(final_cmd, language="markdown")
 
 with tab2:
-    st.subheader("🛠️ 華視打洞機 v66 (完全修復旗艦版)")
-    st.caption("開啟 AI 背景圖 $\rightarrow$ 插入底圖(可縮放) $\rightarrow$ 插入前景 $\rightarrow$ 粉紅筆開窗貼合 $\rightarrow$ 導出 PNG")
+    st.subheader("🛠️ 華視打洞機 v66 (最終完全體)")
+    st.caption("開啟底圖(縮放OK) $\rightarrow$ 插入前景 $\rightarrow$ 粉紅筆開窗(Undo OK) $\rightarrow$ 導出 1080p")
     components.html(HOLE_PUNCHER_V66, height=950, scrolling=True)
