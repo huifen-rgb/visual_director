@@ -1,5 +1,47 @@
 import streamlit as st
-import streamlit.components.v1 as components
+import os
+
+# ==========================================
+# 0. 門禁系統設定 (密鑰管理)
+# ==========================================
+# 建議將密碼設定在 Hugging Face 的 Secrets 裡，名稱為 "APP_PASSWORD"
+# 如果沒設定，預設密碼為 "ftv123"
+_CORRECT_PASSWORD = os.environ.get("APP_PASSWORD", "ftv123")
+
+def check_password():
+    """驗證密碼，若正確則回傳 True"""
+    if "authenticated" not in st.session_state:
+        st.session_state["authenticated"] = False
+
+    # 如果已經驗證過，直接回傳
+    if st.session_state["authenticated"]:
+        return True
+
+    # 顯示登入畫面
+    st.title("🎬 Visual Director 內部系統")
+    st.info("本系統僅供內部製作人使用，請輸入存取碼。")
+    
+    with st.form("login_form"):
+        pwd_input = st.text_input("存取碼 (Access Code)", type="password")
+        submit_button = st.form_submit_button("進入系統")
+        
+        if submit_button:
+            if pwd_input == _CORRECT_PASSWORD:
+                st.session_state["authenticated"] = True
+                st.rerun() # 重新整理以載入主介面
+            else:
+                st.error("❌ 存取碼錯誤，請重新輸入。")
+                return False
+    return False
+
+# ==========================================
+# 執行門禁檢查
+# ==========================================
+if not check_password():
+    st.stop()  # 密碼錯誤或未輸入，停止執行後續程式碼
+
+# --- 以下才是你原本的內容 (tab1, tab2, STYLE_CONFIG 等) ---
+st.success("🔓 認證成功，歡迎使用系統！")
 
 # ==========================================
 # 1. 旗艦風格庫 (10 大全規格美學：100% 細節還原)
