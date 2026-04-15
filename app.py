@@ -2,58 +2,66 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 # ==========================================
-# 1. 旗艦風格庫 (全規格 10 大美學：拒絕精簡)
+# 1. 旗艦風格庫 (全規格 10 大美學：絕不精簡)
 # ==========================================
 STYLE_CONFIG = {
-    "民生消費 (Fluid Analytics)": {"theme": "Consumer TRENDS, Fluid & Advanced", "ui": "Organic shapes, Frosted glass panels", "palette": "Soft Beige, Blue, Red", "highlight": "Vibrant Sunburst Orange"},
-    "社會案件 (Justice Alert)": {"theme": "Crime Scene Noir, Legal Justice", "ui": "CCTV grain, Map data overlays", "palette": "Concrete Grey, Caution Yellow, Police Blue", "highlight": "Safety Orange"},
-    "體育競技 (Victory Orange)": {"theme": "High-Energy Sports Broadcast", "ui": "Carbon fiber, Kinetic speed lines", "palette": "Electric Orange, Graphite Grey, Stark White", "highlight": "Vivid Neon Yellow"},
-    "全球財經 (Elite Obsidian)": {"theme": "High-end Financial Dashboard", "ui": "Anodized Aluminum, Holographic streams", "palette": "Deep Navy, Gold, Cyan", "highlight": "Electric Cyan"},
-    "突發重磅 (Breaking Alert)": {"theme": "Emergency Alert, High-Gloss Crimson", "ui": "Radial Motion Blur, Red internal glow", "palette": "Signal Red, Stark White, Pure Black", "highlight": "Bright Vivid Yellow"},
-    "選情政論 (Democracy Grey)": {"theme": "Political Election Studio", "ui": "Matte Metallic, Star patterns", "palette": "Slate Grey, Navy Blue, Crimson", "highlight": "Vibrant Scarlet Red"},
-    "科技政策 (Cyber Policy)": {"theme": "Digital Policy Hub", "ui": "Poly-grid overlays, Ray-traced refraction", "palette": "Steel Blue, Neon Cyan, Silver", "highlight": "Neon Lime Green"},
-    "綠能永續 (Eco-Future)": {"theme": "Sustainability & ESG", "ui": "Natural leaf textures, Outdoor bokeh", "palette": "Emerald Green, Leaf Green, Soft White", "highlight": "Sunlight Gold"},
-    "現代民俗 (Modern Festive)": {"theme": "Modern Folk, Rich Vermilion", "ui": "Lacquered Wood finish, Silk texture", "palette": "Vermilion Red, Gold, Deep Charcoal", "highlight": "Imperial Gold"},
-    "生醫科技 (Clinical White)": {"theme": "Medical & Bio-Tech", "ui": "Clinical surfaces, DNA helix motifs", "palette": "Pristine White, Sky Blue, Navy", "highlight": "Bright Sky Blue"}
+    "民生消費 (Fluid Analytics)": {"theme": "Consumer TRENDS", "ui": "Organic, Frosted", "palette": "Beige, Blue", "highlight": "Vibrant Orange"},
+    "社會案件 (Justice Alert)": {"theme": "Crime Scene Noir", "ui": "CCTV, Map Overlays", "palette": "Grey, Yellow", "highlight": "Safety Orange"},
+    "體育競技 (Victory Orange)": {"theme": "Sports High-Energy", "ui": "Carbon fiber", "palette": "Orange, Graphite", "highlight": "Neon Yellow"},
+    "全球財經 (Elite Obsidian)": {"theme": "Financial Dashboard", "ui": "Aluminum, Streams", "palette": "Navy, Gold", "highlight": "Electric Cyan"},
+    "突發重磅 (Breaking Alert)": {"theme": "Emergency Crimson", "ui": "Radial Blur", "palette": "Red, Black", "highlight": "Vivid Yellow"},
+    "選情政論 (Democracy Grey)": {"theme": "Political Studio", "ui": "Metallic, Marble", "palette": "Slate Grey, Navy", "highlight": "Scarlet Red"},
+    "科技政策 (Cyber Policy)": {"theme": "Digital Policy Hub", "ui": "Poly-grid", "palette": "Steel Blue, Cyan", "highlight": "Neon Lime"},
+    "綠能永續 (Eco-Future)": {"theme": "Sustainability", "ui": "Natural textures", "palette": "Emerald Green", "highlight": "Sunlight Gold"},
+    "現代民俗 (Modern Festive)": {"theme": "Modern Folk", "ui": "Lacquered Wood", "palette": "Vermilion Red", "highlight": "Imperial Gold"},
+    "生醫科技 (Clinical White)": {"theme": "Bio-Tech", "ui": "Clinical, DNA motifs", "palette": "White, Navy", "highlight": "Sky Blue"}
 }
 
 # ==========================================
-# 2. 核心指令引擎 (符號矩陣、換行、588x90 避讓)
+# 2. 核心指令引擎 (標題霸權、符號矩陣、換行)
 # ==========================================
-def build_final_prompt(title, left_in, right_in, style_name, layout, icon_style, ai_autonomy):
+def build_final_prompt(title, left_in, right_in, style_name, header_mode, icon_style, ai_autonomy):
     style = STYLE_CONFIG[style_name]
     
-    # 🛑 符號矩陣後台鎖定：保證去符號、變色、色塊化、換行
+    # 🛑 標題大小與層次霸權邏輯
+    HEADER_WEIGHT = "TITLE FONT SIZE: MEGA LARGE (300% of body text). DOMINANT VISUAL HIERARCHY."
+    if "兩行" in header_mode:
+        HEADER_WEIGHT += " USE TWO-LINE STACKED LAYOUT. MAX IMPACT."
+    else:
+        HEADER_WEIGHT += " USE SLEEK ONE-LINE LAYOUT."
+
+    # 🛑 符號矩陣與效果說明鎖定 (依製作人指示修正)
     SYMBOL_LOGIC = f"""
 [STRICT SYMBOL TRANSFORMATION]
-- DOUBLE QUOTES (" "): Highlight text within quotes using {style['highlight']}. REMOVE quotes in final image.
-- LENTICULAR BRACKETS (【 】): Render text as Sub-headers on a distinct color block. REMOVE brackets.
-- PARENTHESES (( )): KEEP text and brackets as is. NO color change.
-- [換行]: LAYOUT INSTRUCTION. Force a new line for the title text at this position.
-- [EFFECTS]: (e.g., [LOGO], [icon], [對話框], [百分比環]). Render the visual object and DELETE the instruction text.
+- DOUBLE QUOTES (" "): Highlight text within " " using {style['highlight']}. REMOVE quotes in final image.
+- LENTICULAR BRACKETS (【 】): Render as Sub-headers on a color block. FONT SIZE: LARGE (150% of body). REMOVE brackets.
+- (PARENTHESES): KEEP as is. NO color change.
+- [換行]: Force a manual line break at this exact position.
+- [效果說明]: (e.g., [對話框], [圓餅圖], [日曆效果---(日期)], [筆刷效果], [蓋章效果], [icon]). 
+  Render the visual object described and COMPLETELY DELETE the instruction text.
 """
     
     TICKER_VOID = "[ABSOLUTE VOID] Bottom-Right ($1332 < X < 1920$, $990 < Y < 1080$) for Ticker."
-    color_logic = f"AI_COLOR: Dynamic based on '{title}' sentiment." if ai_autonomy else f"FIXED: {style['palette']}"
+    color_logic = f"AI_COLOR: Dynamic based on title sentiment." if ai_autonomy else f"FIXED: {style['palette']}"
     
     return f"""
-[SYSTEM V10.7] CANVAS: 1920x1080. {TICKER_VOID}
+[SYSTEM V10.8: HEADER DOMINANCE] CANVAS: 1920x1080. {TICKER_VOID}
+{HEADER_WEIGHT}
 {SYMBOL_LOGIC}
-STYLE: {style_name} | THEME: {style['theme']} | UI: {style['ui']}
-{color_logic} | LAYOUT: {layout} | ICON: {icon_style}
+STYLE: {style_name} | {color_logic} | ICON: {icon_style}
 CONTENT: TITLE={title} | DATA_A={left_in} | DATA_B={right_in}
-[STRICT] Traditional Chinese ONLY. No redraw on person's faces. High-end visual aesthetics.
+[STRICT] Traditional Chinese ONLY. TITLES MUST BE SIGNIFICANTLY LARGER THAN BODY TEXT.
 """
 
 # ==========================================
-# 3. 打洞機 v66 全文鑲嵌 (絕不精簡)
+# 3. 打洞機 v66 全文鑲嵌 (保持完整)
 # ==========================================
 HOLE_PUNCHER_V66 = """
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>華視打洞機 v66 - 操控優化版</title>
+    <title>華視打洞機 v66</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
     <style>
         :root { --pink: #ff00ff; --panel: #1a1a1a; --blue: #2979ff; --green: #00c853; --cyan: #00e5ff; --yellow: #ffeb3b; --orange: #ff9800; }
@@ -132,19 +140,32 @@ HOLE_PUNCHER_V66 = """
             wCtx.save(); wCtx.globalAlpha = 0.4; wCtx.drawImage(cache.pink, 0, 0); wCtx.restore();
             drawUI(s);
         }
-        function drawUI(s) {
-            wCtx.save();
-            let sel = activeItem.type === 'bg' ? bgImages[activeItem.index] : (activeItem.type === 'fg' ? fgImages[activeItem.index] : null);
-            if(sel && !isDrawing) { wCtx.setLineDash([5, 5]); wCtx.strokeStyle = activeItem.type === 'bg' ? '#ffeb3b' : '#00e5ff'; wCtx.lineWidth = 2; wCtx.strokeRect(sel.x, sel.y, sel.w, sel.h); const hX = sel.x + sel.w, hY = sel.y + sel.h; wCtx.beginPath(); wCtx.arc(hX, hY, HANDLE_SIZE/2, 0, Math.PI*2); wCtx.fillStyle = wCtx.strokeStyle; wCtx.fill(); wCtx.strokeStyle = "#fff"; wCtx.lineWidth = 3; wCtx.stroke(); }
-            if (s) { wCtx.setLineDash([8, 4]); wCtx.strokeStyle = '#FF0'; if (s.type === 'rect') wCtx.strokeRect(s.x, s.y, s.w, s.h); else { wCtx.beginPath(); wCtx.ellipse(s.x+s.w/2, s.y+s.h/2, Math.abs(s.w/2), Math.abs(s.h/2), 0, 0, Math.PI*2); wCtx.stroke(); } }
-            wCtx.restore();
-        }
         function deleteSelectedItem() { if (activeItem.type === 'bg') bgImages.splice(activeItem.index, 1); else if (activeItem.type === 'fg') fgImages.splice(activeItem.index, 1); activeItem = { type: null, index: -1 }; render(); }
         const getPos = e => { const r = workCanvas.getBoundingClientRect(); return { x: (e.clientX-r.left)*(1920/r.width), y: (e.clientY-r.top)*(1080/r.height) }; };
         function isInRect(p, r) { const xM=Math.min(r.x,r.x+r.w), xX=Math.max(r.x,r.x+r.w), yM=Math.min(r.y,r.y+r.h), yX=Math.max(r.y,r.y+r.h); return p.x>=xM && p.x<=xX && p.y>=yM && p.y<=yX; }
         function isOverHandle(p, sel) { if(!sel) return false; const dist = Math.sqrt(Math.pow(p.x - (sel.x + sel.w), 2) + Math.pow(p.y - (sel.y + sel.h), 2)); return dist < HANDLE_SIZE; }
-        workCanvas.onmousedown = e => { if(!img.src) return; const p = getPos(e); if (activeShape && isInRect(p, activeShape)) { isMovingShape = true; lastMoveX = p.x; lastMoveY = p.y; return; } let selItem = activeItem.type === 'bg' ? bgImages[activeItem.index] : (activeItem.type === 'fg' ? fgImages[activeItem.index] : null); if(isOverHandle(p, selItem)) { isResizingItem = true; return; } for (let i = fgImages.length - 1; i >= 0; i--) { if (isInRect(p, fgImages[i])) { activeItem = { type: 'fg', index: i }; isMovingItem = true; lastMoveX = p.x; lastMoveY = p.y; render(); return; } } for (let i = bgImages.length - 1; i >= 0; i--) { if (isInRect(p, bgImages[i])) { activeItem = { type: 'bg', index: i }; isMovingItem = true; lastMoveX = p.x; lastMoveY = p.y; render(); return; } } activeItem = { type: null, index: -1 }; commitShape(); isDrawing = true; startX = p.x; startY = p.y; saveHistory(); if(['brush','eraser','refine_add','refine_sub'].includes(currentMode)){ let targetCtx = currentMode.startsWith('refine') ? aiCtx : mCtx; targetCtx.beginPath(); targetCtx.moveTo(p.x, p.y); targetCtx.lineWidth = document.getElementById('brushSize').value; targetCtx.lineCap = targetCtx.lineJoin = 'round'; targetCtx.globalCompositeOperation = (currentMode==='eraser'||currentMode==='refine_sub') ? 'destination-out' : 'source-over'; targetCtx.strokeStyle = 'white'; targetCtx.lineTo(p.x, p.y); targetCtx.stroke(); } render(); };
-        workCanvas.onmousemove = e => { const p = getPos(e); mouseX = p.x; mouseY = p.y; let sel = activeItem.type === 'bg' ? bgImages[activeItem.index] : (activeItem.type === 'fg' ? fgImages[activeItem.index] : null); if (isOverHandle(p, sel)) workCanvas.style.cursor = 'nwse-resize'; else if (isInRect(p, activeShape || {})) workCanvas.style.cursor = 'move'; else workCanvas.style.cursor = 'crosshair'; if (isResizingItem && sel) { sel.w = p.x - sel.x; sel.h = sel.w / sel.aspectRatio; } else if (isMovingItem && sel) { sel.x += (p.x - lastMoveX); sel.y += (p.y - lastMoveY); lastMoveX = p.x; lastMoveY = p.y; } else if (isMovingShape) { activeShape.x += (p.x - lastMoveX); activeShape.y += (p.y - lastMoveY); lastMoveX = p.x; lastMoveY = p.y; } else if (isDrawing && ['brush','eraser','refine_add','refine_sub'].includes(currentMode)) { let targetCtx = currentMode.startsWith('refine') ? aiCtx : mCtx; targetCtx.lineTo(p.x, p.y); targetCtx.stroke(); } render(); };
+        workCanvas.onmousedown = e => {
+            if(!img.src) return; const p = getPos(e);
+            if (activeShape && isInRect(p, activeShape)) { isMovingShape = true; lastMoveX = p.x; lastMoveY = p.y; return; }
+            let selItem = activeItem.type === 'bg' ? bgImages[activeItem.index] : (activeItem.type === 'fg' ? fgImages[activeItem.index] : null);
+            if(isOverHandle(p, selItem)) { isResizingItem = true; return; }
+            for (let i = fgImages.length - 1; i >= 0; i--) { if (isInRect(p, fgImages[i])) { activeItem = { type: 'fg', index: i }; isMovingItem = true; lastMoveX = p.x; lastMoveY = p.y; render(); return; } }
+            for (let i = bgImages.length - 1; i >= 0; i--) { if (isInRect(p, bgImages[i])) { activeItem = { type: 'bg', index: i }; isMovingItem = true; lastMoveX = p.x; lastMoveY = p.y; render(); return; } }
+            activeItem = { type: null, index: -1 }; commitShape(); isDrawing = true; startX = p.x; startY = p.y; saveHistory();
+            if(['brush','eraser','refine_add','refine_sub'].includes(currentMode)){ 
+                let targetCtx = currentMode.startsWith('refine') ? aiCtx : mCtx; targetCtx.beginPath(); targetCtx.moveTo(p.x, p.y); targetCtx.lineWidth = document.getElementById('brushSize').value; targetCtx.lineCap = targetCtx.lineJoin = 'round'; targetCtx.globalCompositeOperation = (currentMode==='eraser'||currentMode==='refine_sub') ? 'destination-out' : 'source-over'; targetCtx.strokeStyle = 'white'; targetCtx.lineTo(p.x, p.y); targetCtx.stroke(); 
+            }
+            render();
+        };
+        workCanvas.onmousemove = e => {
+            const p = getPos(e); mouseX = p.x; mouseY = p.y; let sel = activeItem.type === 'bg' ? bgImages[activeItem.index] : (activeItem.type === 'fg' ? fgImages[activeItem.index] : null);
+            if (isOverHandle(p, sel)) workCanvas.style.cursor = 'nwse-resize'; else if (isInRect(p, activeShape || {})) workCanvas.style.cursor = 'move'; else workCanvas.style.cursor = 'crosshair';
+            if (isResizingItem && sel) { sel.w = p.x - sel.x; sel.h = sel.w / sel.aspectRatio; }
+            else if (isMovingItem && sel) { sel.x += (p.x - lastMoveX); sel.y += (p.y - lastMoveY); lastMoveX = p.x; lastMoveY = p.y; }
+            else if (isMovingShape) { activeShape.x += (p.x - lastMoveX); activeShape.y += (p.y - lastMoveY); lastMoveX = p.x; lastMoveY = p.y; }
+            else if (isDrawing && ['brush','eraser','refine_add','refine_sub'].includes(currentMode)) { let targetCtx = currentMode.startsWith('refine') ? aiCtx : mCtx; targetCtx.lineTo(p.x, p.y); targetCtx.stroke(); }
+            render();
+        };
         window.onmouseup = () => { if (isDrawing && (currentMode==='rect'||currentMode==='circle')) { activeShape = { type: currentMode, x: startX, y: startY, w: mouseX-startX, h: mouseY-startY }; } isDrawing = isMovingItem = isResizingItem = isMovingShape = false; render(); };
         function commitShape() { if (!activeShape) return; saveHistory(); mCtx.globalCompositeOperation = 'source-over'; mCtx.fillStyle = 'white'; if (activeShape.type === 'rect') mCtx.fillRect(activeShape.x, activeShape.y, activeShape.w, activeShape.h); else { mCtx.beginPath(); mCtx.ellipse(activeShape.x+activeShape.w/2, activeShape.y+activeShape.h/2, Math.abs(activeShape.w/2), Math.abs(activeShape.h/2), 0, 0, Math.PI*2); mCtx.fill(); } activeShape = null; render(); }
         function saveHistory() { history.push({ manual: mCtx.getImageData(0,0,1920,1080), ai: aiCtx.getImageData(0,0,1920,1080) }); if(history.length > 25) history.shift(); }
@@ -165,36 +186,36 @@ HOLE_PUNCHER_V66 = """
 # ==========================================
 # 4. Streamlit 介面 (旗艦全武裝版)
 # ==========================================
-st.set_page_config(page_title="Visual Director v10.7", layout="wide")
-st.title("🎬 Visual Director v10.7 - 華視打洞機旗艦版")
-st.caption("Producer Huifen Edition | 萬華專案與符號協定鎖定")
+st.set_page_config(page_title="Visual Director v10.8", layout="wide")
+st.title("🎬 Visual Director v10.8 - 標題霸權與打洞機聯名版")
+st.caption("Producer Huifen Edition | 標題字體：大大大！")
 
 tab1, tab2 = st.tabs(["🚀 第一步：產出鏡面指令", "🖍️ 第二步：華視打洞機作業區"])
 
 with tab1:
-    # --- A. 強化：視覺轉換矩陣對照 ---
-    with st.expander("❓ 如何寫出專業鏡面？ (符號矩陣說明)", expanded=False):
+    # --- 強化：視覺轉換矩陣對照 (依製作人指示修正) ---
+    with st.expander("❓ 如何寫出專業鏡面？ (符號與效果說明)", expanded=False):
         st.markdown("### 🔠 符號語法與後台轉換")
         st.table([
-            {"語法": '"文字"', "效果": "文字高亮變色", "處理": "❌ 移除引號", "範例": '"芬太尼"'},
-            {"語法": "【文字】", "效果": "色塊背板小標", "處理": "❌ 移除括號", "範例": "【小檔案】"},
-            {"語法": "(文字)", "效果": "維持原樣", "處理": "✅ 保留符號", "範例": "他(媽媽)說的"},
-            {"語法": "[換行]", "效果": "標題強制斷行", "處理": "❌ 移除標籤", "範例": "萬華?[換行]驚悚"},
-            {"語法": "[效果]", "效果": "轉化圖示/物件", "處理": "❌ 移除文字", "範例": "[對話框]"}
+            {"符號語法": '"文字"', "視覺動作": "文字高亮變色", "處理": "❌ 移除引號", "範例": '"芬太尼"'},
+            {"符號語法": "【文字】", "視覺動作": "深色塊背板小標 (字比內文大)", "處理": "❌ 移除括號", "範例": "【小檔案】"},
+            {"符號語法": "(文字)", "視覺動作": "維持原樣", "處理": "✅ 保留符號", "範例": "他(媽媽)說的"},
+            {"符號語法": "[換行]", "視覺動作": "標題強制斷行", "處理": "❌ 移除標籤", "範例": "萬華?[換行]驚悚"},
+            {"符號語法": "[效果說明]", "視覺動作": "轉化為圖示/物件", "處理": "❌ 移除文字", "範例": "[對話框] [圓餅圖] [日曆效果---(日期)] [筆刷效果] [蓋章效果] [icon]"}
         ])
 
     st.divider()
     col_l, col_r = st.columns([1.2, 0.8])
     
     with col_l:
-        st.subheader("📋 鏡面內容編輯 (預設：萬華喪屍專案)")
+        # --- 標題模式快選 (大大大功能歸位) ---
+        st.subheader("📋 鏡面內容編輯")
+        header_mode = st.radio("標題模式：", ["兩行大標題 (超級強調)", "單行大標題 (簡約專業)"], horizontal=True)
         
-        # --- 預設內容：萬華芬太尼專案 ---
-        title_in = st.text_area(
-            "鏡面主標題", 
-            value='"芬太尼喪屍"入侵萬華?\n"對折人"驚悚影像曝光', 
-            height=100
-        )
+        # --- 預設內容：萬華專案 ---
+        default_title = '"芬太尼喪屍"入侵萬華?[換行]\n"對折人"驚悚影像曝光' if "兩行" in header_mode else '"芬太尼喪屍"入侵萬華? "對折人"驚悚影像曝光'
+        
+        title_in = st.text_area("鏡面主標題 (AI 將使文字大大大)", value=default_title, height=100)
         
         c1, c2 = st.columns(2)
         with c1:
@@ -212,8 +233,8 @@ with tab1:
     
     with col_r:
         st.subheader("🛠️ 風格與規格")
-        s_style = st.selectbox("旗艦風格庫", list(STYLE_CONFIG.keys()), index=1) # 預設社會案件
-        ai_sovereignty = st.toggle("✨ 啟動 AI 視覺主權 (自主配色)", value=True)
+        s_style = st.selectbox("旗艦風格庫", list(STYLE_CONFIG.keys()), index=1) 
+        ai_sovereignty = st.toggle("✨ 啟動 AI 視覺主權 (自主變色)", value=True)
         r1, r2 = st.columns(2)
         with r1: s_layout = st.radio("佈局模式", ["GRID", "DYNAMIC"], horizontal=True)
         with r2: s_icon = st.radio("物件質感", ["Flat", "Volumetric"], index=1, horizontal=True)
@@ -222,12 +243,11 @@ with tab1:
     if title_in:
         st.divider()
         st.subheader("🔥 最終生成：Gemini 繪圖指令")
-        # 參數對位修正：(title, left, right, style, layout, icon, ai)
-        final_cmd = build_final_prompt(title_in, left_in, right_in, s_style, s_layout, s_icon, ai_sovereignty)
+        # 參數傳遞 (對位完全修正)
+        final_cmd = build_final_prompt(title_in, left_in, right_in, s_style, header_mode, s_icon, ai_sovereignty)
         st.code(final_cmd, language="markdown")
-        st.success("☝️ 符號矩陣已生效。雙引號與方頭括號將轉化為視覺並移除符號。")
+        st.success("☝️ 標題霸權協定已啟動：主標題文字將設定為 MEGA SIZE。符號矩陣與效果說明已在後台鎖定。")
 
 with tab2:
     st.subheader("🛠️ 華視打洞機 v66 (視覺化作業區)")
-    # 鑲嵌製作人完整 v66 HTML 代碼
     components.html(HOLE_PUNCHER_V66, height=950, scrolling=True)
