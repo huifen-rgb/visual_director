@@ -65,8 +65,13 @@ STYLE_CONFIG = {
 # ==========================================
 def build_final_prompt(title, left_in, right_in, style_name, header_mode, icon_style, ai_autonomy, ticker_lock):
     style = STYLE_CONFIG[style_name]
-    TICKER_VOID = "[ABSOLUTE PHYSICAL VOID] Bottom-Right ($1332 < X < 1920$, $990 < Y < 1080$). NO text, NO icons here." if ticker_lock else "[FULL CANVAS ACCESS]"
-    HEADER_W = "TITLE FONT SIZE: MEGA LARGE (300% of body text). ABSOLUTE VISUAL DOMINANCE."
+# 🟢 優化後的跑馬燈指令：從「物理真空」改為「內容真空，背景延續」
+    TICKER_VOID = (
+        f"[HARD LIMIT] Zone ($1332 < X < 1920$, $990 < Y < 1080$) is for Hardware Ticker. "
+        f"NO text, NO icons, NO UI panels here. "
+        f"ONLY continuous background texture. "
+        f"Pack all content tightly into the remaining space."
+    )
     if "兩行" in header_mode: HEADER_W += " USE TWO-LINE STACKED LAYOUT (MAX IMPACT)."
     SYMBOL_PROTOCOL = f"""
 [STRICT SYMBOL TRANSFORMATION]
